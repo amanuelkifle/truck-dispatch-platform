@@ -7,7 +7,7 @@ checklist. Check items off as they land.
 
 - [x] GitHub repository
 - [x] Next.js application (TypeScript + Tailwind)
-- [ ] Vercel deployment
+- [x] Vercel deployment
 - [ ] PostgreSQL database (Supabase or Neon)
 - [ ] Authentication (Clerk, Supabase Auth, or Auth0)
 - [ ] Organization model
