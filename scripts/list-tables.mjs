@@ -2,7 +2,8 @@
 // public schema. Reads DATABASE_URL from .env.local without needing any
 // extra dependency (Pool/pg is already a project dependency).
 import { readFileSync } from "node:fs";
-import { Pool } from "pg";
+import pg from "pg";
+const { Pool } = pg;
 
 function loadEnvLocal() {
   try {
