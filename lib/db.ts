@@ -1,44 +1,49 @@
 import { Pool } from "pg";
 
-// Single shared connection pool for the app. In serverless environments
-// (Vercel) this pool is reused across invocations within the same
-// function instance; use a pooled connection string (Supabase's
-// "Transaction pooler", port 6543) as DATABASE_URL so this plays nicely
-// with many short-lived serverless connections.
+// Single shared connection pool for the app, created lazily on first use
+// (not at module import time) so that build steps which merely load this
+// module - like Next.js "collecting page data" - don't fail just because
+// DATABASE_URL isn't available in that context.
+//
+// In serverless environments (Vercel) this pool is reused across
+// invocations within the same warm function instance; use a pooled
+// connection string (Supabase's "Transaction pooler", port 6543) as
+// DATABASE_URL so this plays nicely with many short-lived serverless
+// connections.
 
 declare global {
   // eslint-disable-next-line no-var
   var _pgPool: Pool | undefined;
 }
 
-function createPool(): Pool {
+function getPool(): Pool {
+  if (global._pgPool) {
+    return global._pgPool;
+  }
+
   const connectionString = process.env.DATABASE_URL;
 
   if (!connectionString) {
     throw new Error(
-      "DATABASE_URL is not set. Copy .env.example to .env.local and fill it in.",
+      "DATABASE_URL is not set. Copy .env.example to .env.local and fill it in " +
+        "(or, on Vercel, add it under Project Settings -> Environment Variables).",
     );
   }
 
-  return new Pool({
+  const pool = new Pool({
     connectionString,
     ssl: { rejectUnauthorized: false },
     max: 5,
   });
-}
 
-// Reuse the pool across hot reloads in dev, and across warm serverless
-// invocations in production.
-export const pool = global._pgPool ?? createPool();
-
-if (process.env.NODE_ENV !== "production") {
   global._pgPool = pool;
+  return pool;
 }
 
 export async function query<T = unknown>(
   text: string,
   params?: unknown[],
 ): Promise<T[]> {
-  const result = await pool.query(text, params);
+  const result = await getPool().query(text, params);
   return result.rows as T[];
 }
