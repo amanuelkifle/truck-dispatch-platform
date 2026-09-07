@@ -13,6 +13,12 @@ export default function Home() {
         </code>{" "}
         get built on top of this.
       </p>
+      <a
+        href="/login"
+        className="w-fit rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900"
+      >
+        Sign in / Sign up
+      </a>
     </main>
   );
 }

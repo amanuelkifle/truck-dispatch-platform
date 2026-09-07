@@ -9,9 +9,9 @@ checklist. Check items off as they land.
 - [x] Next.js application (TypeScript + Tailwind)
 - [x] Vercel deployment
 - [x] PostgreSQL database (Supabase or Neon)
-- [ ] Authentication (Clerk, Supabase Auth, or Auth0)
-- [ ] Organization model
-- [ ] User roles
+- [x] Authentication (Supabase Auth)
+- [x] Organization model
+- [x] User roles (basic - richer per-role permissions come later)
 
 ## Phase 2 — Carrier Operations
 
