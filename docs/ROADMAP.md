@@ -16,8 +16,8 @@ checklist. Check items off as they land.
 ## Phase 2 — Carrier Operations
 
 - [x] Carrier management
-- [ ] Driver management
-- [ ] Truck management
+- [x] Driver management
+- [x] Truck management
 - [ ] Trailer management
 
 ## Phase 3 — Loads

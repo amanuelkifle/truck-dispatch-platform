@@ -59,11 +59,23 @@ export default async function DashboardPage() {
         >
           Carriers
         </a>
+        <a
+          href="/drivers"
+          className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900"
+        >
+          Drivers
+        </a>
+        <a
+          href="/trucks"
+          className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900"
+        >
+          Trucks
+        </a>
       </div>
 
       <p className="text-sm text-neutral-500">
-        Driver/truck management, the dispatch board, and the load
-        profitability engine (Phases 2-5 in docs/ROADMAP.md) get built here.
+        The dispatch board and load profitability engine (Phases 3-5 in
+        docs/ROADMAP.md) get built here.
       </p>
     </main>
   );
