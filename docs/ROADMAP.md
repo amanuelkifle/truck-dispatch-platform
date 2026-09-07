@@ -3,7 +3,7 @@
 Phase breakdown from `docs/PROJECT_PLAN.md` (section 29), tracked here as a
 checklist. Check items off as they land.
 
-## Phase 1 — Foundation
+## Phase 1 — Foundation (done)
 
 - [x] GitHub repository
 - [x] Next.js application (TypeScript + Tailwind)
