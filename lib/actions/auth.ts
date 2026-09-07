@@ -26,16 +26,26 @@ export async function signUp(formData: FormData) {
     redirect("/login?error=Check your email to confirm your account, then sign in.");
   }
 
-  const orgRows = await query<{ id: string }>(
-    "insert into organizations (name) values ($1) returning id",
-    [organizationName],
+  // Supabase can return the SAME existing auth user (instead of erroring)
+  // when signUp is called again with an already-registered email. Guard
+  // against inserting a duplicate organizations/users row in that case.
+  const existing = await query<{ id: string }>(
+    "select id from users where id = $1",
+    [data.user.id],
   );
-  const organizationId = orgRows[0].id;
 
-  await query(
-    "insert into users (id, organization_id, email, role) values ($1, $2, $3, $4)",
-    [data.user.id, organizationId, email, "dispatch_company"],
-  );
+  if (existing.length === 0) {
+    const orgRows = await query<{ id: string }>(
+      "insert into organizations (name) values ($1) returning id",
+      [organizationName],
+    );
+    const organizationId = orgRows[0].id;
+
+    await query(
+      "insert into users (id, organization_id, email, role) values ($1, $2, $3, $4)",
+      [data.user.id, organizationId, email, "dispatch_company"],
+    );
+  }
 
   redirect("/dashboard");
 }
