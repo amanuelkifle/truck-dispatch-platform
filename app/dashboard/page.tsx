@@ -83,11 +83,17 @@ export default async function DashboardPage() {
         >
           Loads
         </a>
+        <a
+          href="/dispatch"
+          className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900"
+        >
+          Dispatch Board
+        </a>
       </div>
 
       <p className="text-sm text-neutral-500">
-        The dispatch board and load profitability engine (Phases 4-5 in
-        docs/ROADMAP.md) get built here.
+        The load profitability engine (Phase 5 in docs/ROADMAP.md) gets built
+        here next.
       </p>
     </main>
   );

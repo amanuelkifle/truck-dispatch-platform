@@ -35,13 +35,16 @@ checklist. Check items off as they land.
 Note: added minimal Broker management (list + create, no edit form yet)
 as supporting infrastructure, since a load links to a broker.
 
-## Phase 4 — Dispatch Board
+## Phase 4 — Dispatch Board (done)
 
-- [ ] Truck availability board
-- [ ] Active loads
-- [ ] Status management
-- [ ] Upcoming pickups
-- [ ] Upcoming deliveries
+- [x] Truck availability board (kanban by truck status, all 8 TruckStatus
+      values as columns rather than the plan's suggested 6, so
+      at_delivery / out_of_service aren't hidden from dispatch)
+- [x] Active loads (shown on each truck's card, plus a total count)
+- [x] Status management (inline status update per card, same pattern as
+      /trucks)
+- [x] Upcoming pickups
+- [x] Upcoming deliveries
 
 ## Phase 5 — Financial Analytics
 
