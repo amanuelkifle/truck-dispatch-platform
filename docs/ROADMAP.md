@@ -13,21 +13,27 @@ checklist. Check items off as they land.
 - [x] Organization model
 - [x] User roles (basic - richer per-role permissions come later)
 
-## Phase 2 — Carrier Operations
+## Phase 2 — Carrier Operations (done, trailers deferred)
 
 - [x] Carrier management
 - [x] Driver management
 - [x] Truck management
-- [ ] Trailer management
+- [ ] Trailer management (deferred — trucks carry a free-text
+      trailer_number for now; revisit if a dedicated trailers entity is
+      ever needed)
 
-## Phase 3 — Loads
+## Phase 3 — Loads (done)
 
-- [ ] Create load
-- [ ] Edit load
-- [ ] Assign truck
-- [ ] Assign driver
-- [ ] Load status
-- [ ] Pickup and delivery workflow
+- [x] Create load
+- [x] Edit load
+- [x] Assign truck
+- [x] Assign driver
+- [x] Load status
+- [x] Pickup and delivery workflow (status progression through
+      potential -> ... -> delivered -> invoiced -> paid on the loads list)
+
+Note: added minimal Broker management (list + create, no edit form yet)
+as supporting infrastructure, since a load links to a broker.
 
 ## Phase 4 — Dispatch Board
 

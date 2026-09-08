@@ -110,6 +110,8 @@ export interface Truck {
 
 // --- Broker (section 14) ---
 
+export type BrokerStatus = "active" | "inactive" | "pending" | "suspended";
+
 export interface Broker {
   id: string;
   organizationId: string;
@@ -127,7 +129,7 @@ export interface Broker {
   claims: number;
   dispatcherRating: number;
   notes: string;
-  status: string;
+  status: BrokerStatus;
 }
 
 // --- Load (section 9) ---

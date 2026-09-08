@@ -52,7 +52,7 @@ export default async function DashboardPage() {
         )}
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <a
           href="/carriers"
           className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900"
@@ -71,10 +71,22 @@ export default async function DashboardPage() {
         >
           Trucks
         </a>
+        <a
+          href="/brokers"
+          className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900"
+        >
+          Brokers
+        </a>
+        <a
+          href="/loads"
+          className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-neutral-900"
+        >
+          Loads
+        </a>
       </div>
 
       <p className="text-sm text-neutral-500">
-        The dispatch board and load profitability engine (Phases 3-5 in
+        The dispatch board and load profitability engine (Phases 4-5 in
         docs/ROADMAP.md) get built here.
       </p>
     </main>
