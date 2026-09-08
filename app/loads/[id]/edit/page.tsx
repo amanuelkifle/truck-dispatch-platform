@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { query } from "@/lib/db";
 import { updateLoad } from "@/lib/actions/loads";
+import { DOCUMENT_TYPES } from "@/lib/actions/documents";
 import type { EquipmentType, LoadStatus } from "@/lib/types";
 
 const inputClass =
@@ -19,6 +20,13 @@ const EQUIPMENT_TYPES = [
   ["rgn", "RGN"],
   ["other", "Other"],
 ] as const;
+
+interface LoadDocumentRow {
+  id: string;
+  document_type: string;
+  file_name: string | null;
+  uploaded_at: string;
+}
 
 interface LoadDetail {
   id: string;
@@ -84,7 +92,7 @@ export default async function EditLoadPage({
     notFound();
   }
 
-  const [brokers, carriers, trucks, drivers] = await Promise.all([
+  const [brokers, carriers, trucks, drivers, documents] = await Promise.all([
     query<{ id: string; name: string }>(
       "select id, name from brokers where organization_id = $1 order by name",
       [organizationId],
@@ -101,7 +109,18 @@ export default async function EditLoadPage({
       "select id, first_name, last_name from drivers where organization_id = $1 order by last_name",
       [organizationId],
     ),
+    query<LoadDocumentRow>(
+      `select id, document_type, file_name, uploaded_at
+       from documents
+       where load_id = $1 and organization_id = $2
+       order by uploaded_at desc`,
+      [load.id, organizationId],
+    ),
   ]);
+
+  const documentTypeLabels: Record<string, string> = Object.fromEntries(
+    DOCUMENT_TYPES.map((t) => [t.value, t.label]),
+  );
 
   const updateThisLoad = updateLoad.bind(null, load.id);
 
@@ -393,6 +412,50 @@ export default async function EditLoadPage({
           </Link>
         </div>
       </form>
+
+      <div className="flex flex-col gap-3 border-t border-neutral-200 pt-6 dark:border-neutral-800">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Documents</h2>
+          <Link
+            href={`/documents/new?loadId=${load.id}`}
+            className="text-sm text-neutral-500 underline"
+          >
+            Attach a document
+          </Link>
+        </div>
+
+        {documents.length === 0 ? (
+          <p className="text-sm text-neutral-500">
+            No rate confirmation, BOL, or POD attached yet.
+          </p>
+        ) : (
+          <ul className="flex flex-col gap-2 text-sm">
+            {documents.map((doc) => (
+              <li
+                key={doc.id}
+                className="flex items-center justify-between rounded-md border border-neutral-200 px-3 py-2 dark:border-neutral-800"
+              >
+                <span>
+                  <a
+                    href={`/documents/${doc.id}/download`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline"
+                  >
+                    {doc.file_name || "(unnamed)"}
+                  </a>{" "}
+                  <span className="text-neutral-500">
+                    ({documentTypeLabels[doc.document_type] ?? doc.document_type})
+                  </span>
+                </span>
+                <span className="text-neutral-500">
+                  {new Date(doc.uploaded_at).toLocaleDateString()}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </main>
   );
 }

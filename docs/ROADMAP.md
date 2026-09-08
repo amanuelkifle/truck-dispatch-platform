@@ -59,13 +59,19 @@ as supporting infrastructure, since a load links to a broker.
 Note: dispatch-company fee models (section 17 - percentage / flat / hybrid)
 are a separate SaaS-billing concern, not built here.
 
-## Phase 6 — Documents
+## Phase 6 — Documents (done)
 
-- [ ] Rate confirmations
-- [ ] BOL
-- [ ] POD
-- [ ] Carrier packets
-- [ ] File storage
+- [x] Rate confirmations (document_type on upload)
+- [x] BOL (document_type on upload)
+- [x] POD (document_type on upload)
+- [x] Carrier packets (document_type on upload)
+- [x] File storage (Supabase Storage, private bucket, service-role-only
+      access - browser never talks to Storage directly, same trust model
+      as Postgres access in lib/db.ts)
+
+One-time setup required before this works: create a PRIVATE bucket named
+"documents" in Supabase dashboard -> Storage, and run
+db/migrations/0001_documents_metadata.sql in the SQL Editor.
 
 ## Phase 7 — Load Scoring
 
