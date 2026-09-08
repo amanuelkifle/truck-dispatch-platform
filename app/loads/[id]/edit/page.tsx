@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { query } from "@/lib/db";
 import { updateLoad } from "@/lib/actions/loads";
-import { DOCUMENT_TYPES } from "@/lib/actions/documents";
+import { DOCUMENT_TYPES } from "@/lib/document-types";
 import type { EquipmentType, LoadStatus } from "@/lib/types";
 
 const inputClass =

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { query } from "@/lib/db";
-import { deleteDocument, DOCUMENT_TYPES } from "@/lib/actions/documents";
+import { deleteDocument } from "@/lib/actions/documents";
+import { DOCUMENT_TYPES } from "@/lib/document-types";
 
 const TYPE_LABELS: Record<string, string> = Object.fromEntries(
   DOCUMENT_TYPES.map((t) => [t.value, t.label]),
