@@ -46,14 +46,18 @@ as supporting infrastructure, since a load links to a broker.
 - [x] Upcoming pickups
 - [x] Upcoming deliveries
 
-## Phase 5 — Financial Analytics
+## Phase 5 — Financial Analytics (done)
 
-- [ ] Revenue
-- [ ] Loaded RPM
-- [ ] Effective RPM
-- [ ] Deadhead
-- [ ] Weekly truck revenue
-- [ ] Carrier reporting
+- [x] Revenue (org-wide gross revenue, recognized on delivered / invoiced / paid)
+- [x] Loaded RPM (org-wide and per-truck average)
+- [x] Effective RPM (org-wide, per-truck, and per-carrier average)
+- [x] Deadhead (miles and deadhead % at org and carrier level)
+- [x] Weekly truck revenue
+- [x] Carrier reporting (weekly/monthly gross, avg RPM, revenue per truck,
+      deadhead %, loads per truck)
+
+Note: dispatch-company fee models (section 17 - percentage / flat / hybrid)
+are a separate SaaS-billing concern, not built here.
 
 ## Phase 6 — Documents
 
