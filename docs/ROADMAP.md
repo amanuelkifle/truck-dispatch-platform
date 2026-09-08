@@ -73,18 +73,41 @@ One-time setup required before this works: create a PRIVATE bucket named
 "documents" in Supabase dashboard -> Storage, and run
 db/migrations/0001_documents_metadata.sql in the SQL Editor.
 
-## Phase 7 — Load Scoring
+## Phase 7 — Load Scoring (done, market-data-dependent factors deferred)
 
-- [ ] Deadhead scoring
-- [ ] RPM scoring
-- [ ] Lane scoring
-- [ ] Reload scoring
-- [ ] Truck/load matching
+- [x] Deadhead scoring (straight-line/manual estimate on the Loads list;
+      real Mapbox driving distance on the dedicated matching view)
+- [x] RPM scoring (net rate/mile after fuel + tolls, $1.50-$4.00/mi band)
+- [x] Lane scoring (match against carrier preferred_lanes)
+- [x] Reload scoring (proxy: count of the org's other open loads whose
+      origin is within 75mi of this load's destination - a stand-in for
+      true market reload probability, computed from this app's own
+      pipeline rather than a live load-board feed)
+- [x] Truck/load matching (`/matching` - pick an available/searching
+      truck, rank unassigned loads by score using a real driving-distance
+      deadhead from that truck's current location)
+- [x] Mapbox integration (geocoding on truck/load create+edit; Directions
+      Matrix for the matching view; free tier - 100k requests/month -
+      verified sufficient for realistic usage, batched 1 truck x N loads
+      per request)
+- [x] Broker risk factor (broker.status folded into the composite score)
 
-## Phase 8 — Automation and AI
+Note: per docs/PROJECT_PLAN.md section 12, "Destination Market Strength"
+and true reload probability (from a live load-board feed) and HOS/detention
+risk (from ELD integration) are explicitly deferred - this app has no data
+source for any of those yet. The reload and broker-status factors above are
+the closest achievable stand-ins with data already in the schema.
 
-- [ ] Document extraction
-- [ ] AI load recommendations
-- [ ] Automated notifications
-- [ ] Broker scoring
+## Phase 8 — Automation and AI (in-app notifications done, AI deferred)
+
+- [x] Automated notifications (in-app only, computed fresh on every
+      dashboard load - no email/SMS provider, no cron: carrier insurance
+      expiring/expired, pickups approaching or overdue on
+      not-yet-booked loads, delivered loads with no POD on file,
+      booked/dispatched loads with no rate confirmation on file)
+- [ ] Document extraction (deferred - needs an AI/OCR provider, on hold
+      per cost/scope discussion)
+- [ ] AI load recommendations (deferred - same reason; Phase 7's scoring
+      above is a plain weighted formula, not AI-based)
+- [ ] Broker scoring beyond the status flag already folded into Phase 7
 - [ ] Route recommendations

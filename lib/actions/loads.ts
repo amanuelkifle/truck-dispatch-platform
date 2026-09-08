@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { query } from "@/lib/db";
+import { geocode } from "@/lib/mapbox";
 import type { LoadStatus } from "@/lib/types";
 
 // Every loads query/mutation is scoped to the signed-in user's
@@ -38,6 +39,14 @@ function numberOrNull(formData: FormData, field: string): number | null {
   return raw ? Number(raw) : null;
 }
 
+// Best-effort - a load still creates/saves fine if geocoding fails or no
+// Mapbox token is configured; scoring just treats that side as unknown.
+async function geocodeOrNull(place: string | null): Promise<{ lat: number | null; lng: number | null }> {
+  if (!place) return { lat: null, lng: null };
+  const result = await geocode(place);
+  return { lat: result?.lat ?? null, lng: result?.lng ?? null };
+}
+
 export async function createLoad(formData: FormData) {
   const organizationId = await requireOrganizationId();
 
@@ -46,20 +55,28 @@ export async function createLoad(formData: FormData) {
     throw new Error("Load number is required.");
   }
 
+  const origin = String(formData.get("origin") ?? "") || null;
+  const destination = String(formData.get("destination") ?? "") || null;
+  const [originGeo, destinationGeo] = await Promise.all([
+    geocodeOrNull(origin),
+    geocodeOrNull(destination),
+  ]);
+
   await query(
     `insert into loads (
       organization_id, load_number, broker_id, carrier_id, origin, destination,
       pickup_date, pickup_time, delivery_date, delivery_time, commodity,
       weight, trailer_type, loaded_miles, deadhead_miles, rate,
-      fuel_estimate, tolls, status, notes
-    ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)`,
+      fuel_estimate, tolls, status, notes,
+      origin_latitude, origin_longitude, destination_latitude, destination_longitude
+    ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24)`,
     [
       organizationId,
       loadNumber,
       String(formData.get("brokerId") ?? "") || null,
       String(formData.get("carrierId") ?? "") || null,
-      String(formData.get("origin") ?? "") || null,
-      String(formData.get("destination") ?? "") || null,
+      origin,
+      destination,
       String(formData.get("pickupDate") ?? "") || null,
       String(formData.get("pickupTime") ?? "") || null,
       String(formData.get("deliveryDate") ?? "") || null,
@@ -74,6 +91,10 @@ export async function createLoad(formData: FormData) {
       numberOrNull(formData, "tolls"),
       String(formData.get("status") ?? "potential") as LoadStatus,
       String(formData.get("notes") ?? "") || null,
+      originGeo.lat,
+      originGeo.lng,
+      destinationGeo.lat,
+      destinationGeo.lng,
     ],
   );
 
@@ -89,6 +110,22 @@ export async function updateLoad(loadId: string, formData: FormData) {
     throw new Error("Load number is required.");
   }
 
+  const origin = String(formData.get("origin") ?? "") || null;
+  const destination = String(formData.get("destination") ?? "") || null;
+
+  // Only re-geocode when the text actually changed - avoids burning an API
+  // call on every save when the dispatcher only touched, say, the status.
+  const existingRows = await query<{ origin: string | null; destination: string | null }>(
+    "select origin, destination from loads where id = $1 and organization_id = $2",
+    [loadId, organizationId],
+  );
+  const existing = existingRows[0];
+
+  const [originGeo, destinationGeo] = await Promise.all([
+    origin !== existing?.origin ? geocodeOrNull(origin) : Promise.resolve(undefined),
+    destination !== existing?.destination ? geocodeOrNull(destination) : Promise.resolve(undefined),
+  ]);
+
   await query(
     `update loads set
       load_number = $1, broker_id = $2, carrier_id = $3, truck_id = $4,
@@ -97,6 +134,8 @@ export async function updateLoad(loadId: string, formData: FormData) {
       commodity = $12, weight = $13, trailer_type = $14, loaded_miles = $15,
       deadhead_miles = $16, rate = $17, fuel_estimate = $18, tolls = $19,
       status = $20, notes = $21
+      ${originGeo ? ", origin_latitude = $24, origin_longitude = $25" : ""}
+      ${destinationGeo ? ", destination_latitude = $26, destination_longitude = $27" : ""}
     where id = $22 and organization_id = $23`,
     [
       loadNumber,
@@ -104,8 +143,8 @@ export async function updateLoad(loadId: string, formData: FormData) {
       String(formData.get("carrierId") ?? "") || null,
       String(formData.get("truckId") ?? "") || null,
       String(formData.get("driverId") ?? "") || null,
-      String(formData.get("origin") ?? "") || null,
-      String(formData.get("destination") ?? "") || null,
+      origin,
+      destination,
       String(formData.get("pickupDate") ?? "") || null,
       String(formData.get("pickupTime") ?? "") || null,
       String(formData.get("deliveryDate") ?? "") || null,
@@ -122,6 +161,10 @@ export async function updateLoad(loadId: string, formData: FormData) {
       String(formData.get("notes") ?? "") || null,
       loadId,
       organizationId,
+      originGeo?.lat,
+      originGeo?.lng,
+      destinationGeo?.lat,
+      destinationGeo?.lng,
     ],
   );
 

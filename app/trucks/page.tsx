@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { query } from "@/lib/db";
-import { updateTruckStatus } from "@/lib/actions/trucks";
+import { updateTruckStatus, updateTruckLocation } from "@/lib/actions/trucks";
 import type { TruckStatus } from "@/lib/types";
 
 const STATUS_OPTIONS: TruckStatus[] = [
@@ -126,8 +126,39 @@ export default async function TrucksPage() {
                   <td className="px-4 py-3 text-neutral-500">
                     {truck.equipment_type}
                   </td>
-                  <td className="px-4 py-3 text-neutral-500">
-                    {[truck.current_city, truck.current_state].filter(Boolean).join(", ") || "—"}
+                  <td className="px-4 py-3">
+                    <form
+                      action={async (formData) => {
+                        "use server";
+                        await updateTruckLocation(
+                          truck.id,
+                          String(formData.get("currentCity") ?? ""),
+                          String(formData.get("currentState") ?? ""),
+                        );
+                      }}
+                      className="flex items-center gap-1"
+                    >
+                      <input
+                        name="currentCity"
+                        type="text"
+                        defaultValue={truck.current_city ?? ""}
+                        placeholder="City"
+                        className="w-20 rounded-md border border-neutral-300 bg-transparent px-1.5 py-1 text-xs dark:border-neutral-700"
+                      />
+                      <input
+                        name="currentState"
+                        type="text"
+                        defaultValue={truck.current_state ?? ""}
+                        placeholder="ST"
+                        className="w-12 rounded-md border border-neutral-300 bg-transparent px-1.5 py-1 text-xs dark:border-neutral-700"
+                      />
+                      <button
+                        type="submit"
+                        className="text-xs text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+                      >
+                        save
+                      </button>
+                    </form>
                   </td>
                   <td className="px-4 py-3 text-neutral-500">
                     {truck.available_date || "—"}

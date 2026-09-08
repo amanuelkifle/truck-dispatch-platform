@@ -103,6 +103,8 @@ export interface Truck {
   trailerNumber: string;
   currentCity: string;
   currentState: string;
+  currentLatitude?: number;
+  currentLongitude?: number;
   availableDate: string;
   availableTime: string;
   status: TruckStatus;
@@ -172,6 +174,10 @@ export interface Load {
   tolls: number;
   status: LoadStatus;
   notes: string;
+  originLatitude?: number;
+  originLongitude?: number;
+  destinationLatitude?: number;
+  destinationLongitude?: number;
 }
 
 // --- Load profitability (section 11) ---
