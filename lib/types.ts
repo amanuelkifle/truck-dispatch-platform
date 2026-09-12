@@ -10,10 +10,41 @@ export type UserRole =
   | "carrier"
   | "dispatcher";
 
+// --- Billing (Stripe subscriptions) ---
+
+export type PlanTier = "starter" | "growth" | "enterprise";
+
+export type SubscriptionStatus =
+  | "trialing"
+  | "active"
+  | "past_due"
+  | "canceled"
+  | "incomplete";
+
 export interface Organization {
   id: string;
   name: string;
   createdAt: string;
+  stripeCustomerId?: string | null;
+  stripeSubscriptionId?: string | null;
+  plan?: PlanTier | null;
+  subscriptionStatus?: SubscriptionStatus | null;
+  trialEndsAt?: string | null;
+  currentPeriodEnd?: string | null;
+}
+
+// An organization can use the app while trialing or active. past_due gets
+// a grace period (still counted as access here - the dashboard surfaces a
+// warning instead of a hard lock, since Stripe is already retrying the
+// card automatically); canceled/incomplete/null (never subscribed) do not.
+export function hasActiveAccess(
+  org: Pick<Organization, "subscriptionStatus">,
+): boolean {
+  return (
+    org.subscriptionStatus === "trialing" ||
+    org.subscriptionStatus === "active" ||
+    org.subscriptionStatus === "past_due"
+  );
 }
 
 export interface AppUser {

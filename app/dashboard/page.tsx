@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { query } from "@/lib/db";
 import { signOut } from "@/lib/actions/auth";
+import { openBillingPortal } from "@/lib/actions/billing";
+import { hasActiveAccess } from "@/lib/types";
 import type { AppUser, Organization } from "@/lib/types";
 
 // Phase 8 (in-app notifications slice only - see docs/ROADMAP.md for what's
@@ -36,7 +38,19 @@ function daysUntil(dateStr: string): number {
   return Math.round((target.getTime() - today.getTime()) / 86400000);
 }
 
-export default async function DashboardPage() {
+const SUBSCRIPTION_STATUS_LABEL: Record<string, string> = {
+  trialing: "Free trial",
+  active: "Active",
+  past_due: "Payment failed — update your card",
+  canceled: "Cancelled",
+  incomplete: "Incomplete",
+};
+
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: { billing?: string };
+}) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -54,11 +68,22 @@ export default async function DashboardPage() {
 
   const organizations = appUser
     ? await query<Organization>(
-        'select id, name, created_at as "createdAt" from organizations where id = $1',
+        `select id, name, created_at as "createdAt", plan,
+                subscription_status as "subscriptionStatus",
+                trial_ends_at as "trialEndsAt", current_period_end as "currentPeriodEnd"
+         from organizations where id = $1`,
         [appUser.organizationId],
       )
     : [];
   const organization = organizations[0];
+
+  // Platform admin accounts run the platform - they're not a paying
+  // customer org, so they skip the subscription gate entirely. Every
+  // other org needs an active (or trialing/past_due-with-grace)
+  // subscription to use the app past this point.
+  if (appUser?.role !== "platform_admin" && organization && !hasActiveAccess(organization)) {
+    redirect("/subscribe");
+  }
 
   const organizationId = appUser?.organizationId;
 
@@ -129,6 +154,12 @@ export default async function DashboardPage() {
         </form>
       </div>
 
+      {searchParams.billing === "success" && (
+        <p className="rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-300">
+          You&rsquo;re all set — your trial has started.
+        </p>
+      )}
+
       <div className="rounded-md border border-neutral-200 px-4 py-3 text-sm dark:border-neutral-800">
         <p>Signed in as {user.email}</p>
         {organization && appUser ? (
@@ -139,6 +170,20 @@ export default async function DashboardPage() {
           <p className="text-amber-600 dark:text-amber-400">
             No organization record found for this user yet.
           </p>
+        )}
+        {appUser?.role !== "platform_admin" && organization?.subscriptionStatus && (
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <span className="text-neutral-500">
+              Plan: <span className="font-medium">{organization.plan}</span> &middot;{" "}
+              {SUBSCRIPTION_STATUS_LABEL[organization.subscriptionStatus] ??
+                organization.subscriptionStatus}
+            </span>
+            <form action={openBillingPortal}>
+              <button type="submit" className="text-xs underline text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200">
+                Manage billing
+              </button>
+            </form>
+          </div>
         )}
       </div>
 
@@ -284,6 +329,22 @@ export default async function DashboardPage() {
         >
           Documents
         </a>
+        {appUser?.role === "platform_admin" && (
+          <a
+            href="/contact-messages"
+            className="rounded-md border border-amber-400 px-4 py-2 text-sm font-medium text-amber-700 dark:border-amber-700 dark:text-amber-400"
+          >
+            Contact messages
+          </a>
+        )}
+        {appUser?.role === "platform_admin" && (
+          <a
+            href="/support-inbox"
+            className="rounded-md border border-amber-400 px-4 py-2 text-sm font-medium text-amber-700 dark:border-amber-700 dark:text-amber-400"
+          >
+            Support inbox
+          </a>
+        )}
       </div>
     </main>
   );
