@@ -94,8 +94,9 @@ function IconLayers({ className }: { className?: string }) {
 
 function HeroIllustration() {
   return (
-    <svg viewBox="0 0 480 300" className="w-full max-w-lg" role="img" aria-label="Illustration of a semi truck on a highway">
-      <circle cx="380" cy="70" r="46" fill="currentColor" className="text-amber-200 dark:text-amber-900/40" />
+    <svg viewBox="0 0 480 320" className="w-full max-w-lg" role="img" aria-label="Illustration of a red semi-truck cab, viewed head-on, no trailer attached">
+      {/* sun + background road lines */}
+      <circle cx="380" cy="58" r="44" fill="currentColor" className="text-amber-200 dark:text-amber-900/40" />
       <path
         d="M40 92c26-18 60-18 86 0s60 18 86 0 60-18 86 0 60 18 86 0"
         stroke="currentColor"
@@ -104,34 +105,60 @@ function HeroIllustration() {
         fill="none"
       />
 
-      {/* motion lines */}
-      <path d="M40 176h34M32 190h44M46 204h30" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="text-amber-400/70 dark:text-amber-500/50" />
+      {/* exhaust stacks */}
+      <rect x="150" y="58" width="13" height="90" rx="3" fill="#B9C0C4" />
+      <rect x="156" y="58" width="7" height="90" fill="#8B9296" />
+      <ellipse cx="156.5" cy="58" rx="8" ry="4" fill="#4B5257" />
+      <rect x="317" y="58" width="13" height="90" rx="3" fill="#B9C0C4" />
+      <rect x="323" y="58" width="7" height="90" fill="#8B9296" />
+      <ellipse cx="323.5" cy="58" rx="8" ry="4" fill="#4B5257" />
 
-      {/* trailer */}
-      <rect x="96" y="118" width="180" height="86" rx="8" className="fill-white stroke-neutral-900 dark:fill-neutral-800 dark:stroke-neutral-200" strokeWidth="3" />
-      <path d="M96 150h180" stroke="currentColor" strokeWidth="2" className="text-neutral-300 dark:text-neutral-600" />
+      {/* mirrors */}
+      <line x1="178" y1="118" x2="158" y2="108" stroke="#23262B" strokeWidth="3" strokeLinecap="round" />
+      <rect x="142" y="100" width="17" height="24" rx="4" fill="#23262B" />
+      <line x1="302" y1="118" x2="322" y2="108" stroke="#23262B" strokeWidth="3" strokeLinecap="round" />
+      <rect x="321" y="100" width="17" height="24" rx="4" fill="#23262B" />
 
-      {/* cab */}
-      <path
-        d="M276 138h44l30 30v36h-74v-66Z"
-        className="fill-neutral-900 stroke-neutral-900 dark:fill-neutral-100 dark:stroke-neutral-100"
-        strokeWidth="3"
-        strokeLinejoin="round"
-      />
-      <path d="M292 150h20a8 8 0 0 1 8 8v10h-28v-18Z" className="fill-amber-300" />
-      <circle cx="330" cy="150" r="5" className="fill-amber-400" />
+      {/* cab roof + windshield */}
+      <rect x="178" y="98" width="124" height="46" rx="14" fill="#C8352B" />
+      <rect x="192" y="106" width="44" height="28" rx="4" fill="#2B3440" />
+      <rect x="244" y="106" width="44" height="28" rx="4" fill="#2B3440" />
+      <rect x="238" y="104" width="4" height="32" fill="#C8352B" />
+      <path d="M198 110 208 130" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="2" strokeLinecap="round" />
+      <path d="M250 110 260 130" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="2" strokeLinecap="round" />
+
+      {/* hood */}
+      <rect x="156" y="142" width="168" height="50" rx="10" fill="#C8352B" />
+      <path d="M162 148h156" stroke="#E2685D" strokeWidth="3" strokeLinecap="round" />
+
+      {/* grille */}
+      <rect x="204" y="156" width="72" height="4" rx="2" fill="#C7CCCF" stroke="#8B9296" strokeWidth="0.5" />
+      <rect x="204" y="164" width="72" height="4" rx="2" fill="#C7CCCF" stroke="#8B9296" strokeWidth="0.5" />
+      <rect x="204" y="172" width="72" height="4" rx="2" fill="#C7CCCF" stroke="#8B9296" strokeWidth="0.5" />
+      <rect x="204" y="180" width="72" height="4" rx="2" fill="#C7CCCF" stroke="#8B9296" strokeWidth="0.5" />
+      <rect x="204" y="188" width="72" height="4" rx="2" fill="#C7CCCF" stroke="#8B9296" strokeWidth="0.5" />
+
+      {/* headlights */}
+      <rect x="160" y="158" width="28" height="20" rx="6" fill="#FCD34D" stroke="#92400E" strokeWidth="1" />
+      <circle cx="174" cy="165" r="3" fill="#ffffff" fillOpacity="0.75" />
+      <rect x="292" y="158" width="28" height="20" rx="6" fill="#FCD34D" stroke="#92400E" strokeWidth="1" />
+      <circle cx="306" cy="165" r="3" fill="#ffffff" fillOpacity="0.75" />
+
+      {/* bumper */}
+      <rect x="150" y="192" width="180" height="14" rx="4" fill="#5B6167" stroke="#33383C" strokeWidth="1" />
 
       {/* wheels */}
-      <circle cx="140" cy="210" r="20" className="fill-neutral-900 dark:fill-neutral-950" />
-      <circle cx="140" cy="210" r="8" className="fill-neutral-400" />
-      <circle cx="232" cy="210" r="20" className="fill-neutral-900 dark:fill-neutral-950" />
-      <circle cx="232" cy="210" r="8" className="fill-neutral-400" />
-      <circle cx="308" cy="210" r="20" className="fill-neutral-900 dark:fill-neutral-950" />
-      <circle cx="308" cy="210" r="8" className="fill-neutral-400" />
+      <circle cx="192" cy="232" r="26" fill="#1C1F22" />
+      <circle cx="192" cy="232" r="10" fill="#9AA0A4" />
+      <circle cx="288" cy="232" r="26" fill="#1C1F22" />
+      <circle cx="288" cy="232" r="10" fill="#9AA0A4" />
+
+      {/* ground shadow */}
+      <ellipse cx="240" cy="254" rx="132" ry="9" fill="currentColor" className="text-neutral-900/10 dark:text-white/10" />
 
       {/* ground */}
-      <rect x="0" y="228" width="480" height="6" className="fill-neutral-300 dark:fill-neutral-700" />
-      <path d="M20 238h30M70 238h30M120 238h30M170 238h30M220 238h30M270 238h30M320 238h30M370 238h30M420 238h30" stroke="currentColor" strokeWidth="4" strokeDasharray="14 14" className="text-amber-400/60" />
+      <rect x="0" y="270" width="480" height="6" className="fill-neutral-300 dark:fill-neutral-700" />
+      <path d="M20 282h30M70 282h30M120 282h30M170 282h30M220 282h30M270 282h30M320 282h30M370 282h30M420 282h30" stroke="currentColor" strokeWidth="4" strokeDasharray="14 14" className="text-amber-400/60" />
     </svg>
   );
 }
