@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Space_Grotesk } from "next/font/google";
 import { submitContactMessage } from "@/lib/actions/contact";
 
@@ -378,8 +379,17 @@ export default function Home({
             </div>
             <p className="mt-4 text-xs text-neutral-500">No credit card required to start.</p>
           </div>
-          <div className="flex justify-center text-neutral-900 dark:text-neutral-100">
-            <HeroIllustration />
+          <div className="flex justify-center">
+            <div className="w-full max-w-lg overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+              <Image
+                src="/hero-truck.jpg"
+                alt="A red semi-truck hauling a trailer down a sunlit highway"
+                width={1600}
+                height={1005}
+                className="h-auto w-full"
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>
