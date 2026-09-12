@@ -95,6 +95,52 @@ function IconLayers({ className }: { className?: string }) {
 function HeroIllustration() {
   return (
     <svg viewBox="0 0 480 320" className="w-full max-w-lg" role="img" aria-label="Illustration of a red semi-truck cab, viewed head-on, no trailer attached">
+      <defs>
+        <linearGradient id="heroCab" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#E2685D" />
+          <stop offset="35%" stopColor="#D0453A" />
+          <stop offset="100%" stopColor="#9C2A20" />
+        </linearGradient>
+        <linearGradient id="heroHood" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#DB5348" />
+          <stop offset="45%" stopColor="#C8352B" />
+          <stop offset="100%" stopColor="#8F241C" />
+        </linearGradient>
+        <linearGradient id="heroChromeH" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#8B9296" />
+          <stop offset="18%" stopColor="#F2F4F5" />
+          <stop offset="38%" stopColor="#AEB4B7" />
+          <stop offset="60%" stopColor="#F2F4F5" />
+          <stop offset="82%" stopColor="#8B9296" />
+          <stop offset="100%" stopColor="#C7CCCF" />
+        </linearGradient>
+        <linearGradient id="heroChromeV" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#F2F4F5" />
+          <stop offset="45%" stopColor="#B9C0C4" />
+          <stop offset="100%" stopColor="#6B7175" />
+        </linearGradient>
+        <linearGradient id="heroGlass" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#3B4757" />
+          <stop offset="55%" stopColor="#232C37" />
+          <stop offset="100%" stopColor="#161C24" />
+        </linearGradient>
+        <radialGradient id="heroTire" cx="38%" cy="34%" r="70%">
+          <stop offset="0%" stopColor="#3A3D40" />
+          <stop offset="55%" stopColor="#1C1F22" />
+          <stop offset="100%" stopColor="#0E1012" />
+        </radialGradient>
+        <radialGradient id="heroHub" cx="38%" cy="34%" r="70%">
+          <stop offset="0%" stopColor="#E4E7E8" />
+          <stop offset="55%" stopColor="#9AA0A4" />
+          <stop offset="100%" stopColor="#6A6F72" />
+        </radialGradient>
+        <radialGradient id="heroHeadlight" cx="42%" cy="38%" r="65%">
+          <stop offset="0%" stopColor="#FFFDF5" />
+          <stop offset="45%" stopColor="#FCD34D" />
+          <stop offset="100%" stopColor="#D89A1E" />
+        </radialGradient>
+      </defs>
+
       {/* sun + background road lines */}
       <circle cx="380" cy="58" r="44" fill="currentColor" className="text-amber-200 dark:text-amber-900/40" />
       <path
@@ -106,55 +152,90 @@ function HeroIllustration() {
       />
 
       {/* exhaust stacks */}
-      <rect x="150" y="58" width="13" height="90" rx="3" fill="#B9C0C4" />
-      <rect x="156" y="58" width="7" height="90" fill="#8B9296" />
-      <ellipse cx="156.5" cy="58" rx="8" ry="4" fill="#4B5257" />
-      <rect x="317" y="58" width="13" height="90" rx="3" fill="#B9C0C4" />
-      <rect x="323" y="58" width="7" height="90" fill="#8B9296" />
-      <ellipse cx="323.5" cy="58" rx="8" ry="4" fill="#4B5257" />
+      <rect x="150" y="58" width="13" height="90" rx="3" fill="url(#heroChromeV)" />
+      <rect x="156" y="58" width="7" height="90" fill="#6B7175" opacity="0.5" />
+      <ellipse cx="156.5" cy="58" rx="8" ry="4" fill="#3A3F44" />
+      <ellipse cx="156.5" cy="56" rx="6" ry="2.4" fill="#0E1012" />
+      <rect x="317" y="58" width="13" height="90" rx="3" fill="url(#heroChromeV)" />
+      <rect x="323" y="58" width="7" height="90" fill="#6B7175" opacity="0.5" />
+      <ellipse cx="323.5" cy="58" rx="8" ry="4" fill="#3A3F44" />
+      <ellipse cx="323.5" cy="56" rx="6" ry="2.4" fill="#0E1012" />
 
       {/* mirrors */}
       <line x1="178" y1="118" x2="158" y2="108" stroke="#23262B" strokeWidth="3" strokeLinecap="round" />
       <rect x="142" y="100" width="17" height="24" rx="4" fill="#23262B" />
+      <rect x="145" y="103" width="11" height="14" rx="2" fill="#3B4757" opacity="0.8" />
       <line x1="302" y1="118" x2="322" y2="108" stroke="#23262B" strokeWidth="3" strokeLinecap="round" />
       <rect x="321" y="100" width="17" height="24" rx="4" fill="#23262B" />
+      <rect x="324" y="103" width="11" height="14" rx="2" fill="#3B4757" opacity="0.8" />
+
+      {/* sun visor */}
+      <rect x="182" y="94" width="116" height="7" rx="3.5" fill="#8F241C" />
 
       {/* cab roof + windshield */}
-      <rect x="178" y="98" width="124" height="46" rx="14" fill="#C8352B" />
-      <rect x="192" y="106" width="44" height="28" rx="4" fill="#2B3440" />
-      <rect x="244" y="106" width="44" height="28" rx="4" fill="#2B3440" />
-      <rect x="238" y="104" width="4" height="32" fill="#C8352B" />
-      <path d="M198 110 208 130" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="2" strokeLinecap="round" />
-      <path d="M250 110 260 130" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="2" strokeLinecap="round" />
+      <rect x="178" y="98" width="124" height="46" rx="14" fill="url(#heroCab)" />
+      <rect x="178" y="98" width="124" height="10" rx="8" fill="#ffffff" opacity="0.16" />
+      <rect x="192" y="106" width="44" height="28" rx="4" fill="url(#heroGlass)" />
+      <rect x="244" y="106" width="44" height="28" rx="4" fill="url(#heroGlass)" />
+      <rect x="238" y="104" width="4" height="32" fill="#B4362C" />
+      <path d="M178 108v30" stroke="#8F241C" strokeWidth="2" opacity="0.5" strokeLinecap="round" />
+      <path d="M302 108v30" stroke="#8F241C" strokeWidth="2" opacity="0.5" strokeLinecap="round" />
+      <path d="M197 109 209 131" stroke="#ffffff" strokeOpacity="0.3" strokeWidth="3" strokeLinecap="round" />
+      <path d="M249 109 261 131" stroke="#ffffff" strokeOpacity="0.3" strokeWidth="3" strokeLinecap="round" />
 
       {/* hood */}
-      <rect x="156" y="142" width="168" height="50" rx="10" fill="#C8352B" />
-      <path d="M162 148h156" stroke="#E2685D" strokeWidth="3" strokeLinecap="round" />
+      <rect x="156" y="142" width="168" height="50" rx="10" fill="url(#heroHood)" />
+      <path d="M162 148h156" stroke="#F0857A" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+      <path d="M156 178h168" stroke="#6E1811" strokeWidth="2" opacity="0.4" />
+      <rect x="164" y="164" width="18" height="4" rx="2" fill="#6E1811" opacity="0.5" />
+      <rect x="298" y="164" width="18" height="4" rx="2" fill="#6E1811" opacity="0.5" />
 
       {/* grille */}
-      <rect x="204" y="156" width="72" height="4" rx="2" fill="#C7CCCF" stroke="#8B9296" strokeWidth="0.5" />
-      <rect x="204" y="164" width="72" height="4" rx="2" fill="#C7CCCF" stroke="#8B9296" strokeWidth="0.5" />
-      <rect x="204" y="172" width="72" height="4" rx="2" fill="#C7CCCF" stroke="#8B9296" strokeWidth="0.5" />
-      <rect x="204" y="180" width="72" height="4" rx="2" fill="#C7CCCF" stroke="#8B9296" strokeWidth="0.5" />
-      <rect x="204" y="188" width="72" height="4" rx="2" fill="#C7CCCF" stroke="#8B9296" strokeWidth="0.5" />
+      <rect x="202" y="154" width="76" height="38" rx="4" fill="#3A3F44" />
+      <rect x="204" y="156" width="72" height="4" rx="2" fill="url(#heroChromeH)" stroke="#6B7175" strokeWidth="0.5" />
+      <rect x="204" y="164" width="72" height="4" rx="2" fill="url(#heroChromeH)" stroke="#6B7175" strokeWidth="0.5" />
+      <rect x="204" y="172" width="72" height="4" rx="2" fill="url(#heroChromeH)" stroke="#6B7175" strokeWidth="0.5" />
+      <rect x="204" y="180" width="72" height="4" rx="2" fill="url(#heroChromeH)" stroke="#6B7175" strokeWidth="0.5" />
+      <rect x="204" y="188" width="72" height="4" rx="2" fill="url(#heroChromeH)" stroke="#6B7175" strokeWidth="0.5" />
+      <circle cx="240" cy="173" r="7" fill="url(#heroHub)" stroke="#6B7175" strokeWidth="0.8" />
+      <circle cx="240" cy="173" r="2.6" fill="#8F241C" />
 
       {/* headlights */}
-      <rect x="160" y="158" width="28" height="20" rx="6" fill="#FCD34D" stroke="#92400E" strokeWidth="1" />
-      <circle cx="174" cy="165" r="3" fill="#ffffff" fillOpacity="0.75" />
-      <rect x="292" y="158" width="28" height="20" rx="6" fill="#FCD34D" stroke="#92400E" strokeWidth="1" />
-      <circle cx="306" cy="165" r="3" fill="#ffffff" fillOpacity="0.75" />
+      <rect x="160" y="158" width="28" height="20" rx="6" fill="url(#heroHeadlight)" stroke="#92400E" strokeWidth="1" />
+      <circle cx="171" cy="164" r="3" fill="#ffffff" fillOpacity="0.85" />
+      <circle cx="178" cy="171" r="6" fill="none" stroke="#B87A12" strokeWidth="0.6" opacity="0.6" />
+      <rect x="292" y="158" width="28" height="20" rx="6" fill="url(#heroHeadlight)" stroke="#92400E" strokeWidth="1" />
+      <circle cx="303" cy="164" r="3" fill="#ffffff" fillOpacity="0.85" />
+      <circle cx="310" cy="171" r="6" fill="none" stroke="#B87A12" strokeWidth="0.6" opacity="0.6" />
 
       {/* bumper */}
-      <rect x="150" y="192" width="180" height="14" rx="4" fill="#5B6167" stroke="#33383C" strokeWidth="1" />
+      <rect x="150" y="192" width="180" height="14" rx="4" fill="url(#heroChromeV)" stroke="#33383C" strokeWidth="1" />
+      <rect x="150" y="192" width="180" height="4" rx="2" fill="#ffffff" opacity="0.35" />
 
       {/* wheels */}
-      <circle cx="192" cy="232" r="26" fill="#1C1F22" />
-      <circle cx="192" cy="232" r="10" fill="#9AA0A4" />
-      <circle cx="288" cy="232" r="26" fill="#1C1F22" />
-      <circle cx="288" cy="232" r="10" fill="#9AA0A4" />
+      <circle cx="192" cy="232" r="26" fill="url(#heroTire)" />
+      <circle cx="192" cy="232" r="26" fill="none" stroke="#000000" strokeOpacity="0.3" strokeWidth="1" />
+      <circle cx="192" cy="232" r="10" fill="url(#heroHub)" />
+      <circle cx="192" cy="232" r="3" fill="#4B4F52" />
+      <circle cx="199" cy="232" r="1.1" fill="#5B6062" />
+      <circle cx="195.5" cy="238.1" r="1.1" fill="#5B6062" />
+      <circle cx="188.5" cy="238.1" r="1.1" fill="#5B6062" />
+      <circle cx="185" cy="232" r="1.1" fill="#5B6062" />
+      <circle cx="188.5" cy="225.9" r="1.1" fill="#5B6062" />
+      <circle cx="195.5" cy="225.9" r="1.1" fill="#5B6062" />
+      <circle cx="288" cy="232" r="26" fill="url(#heroTire)" />
+      <circle cx="288" cy="232" r="26" fill="none" stroke="#000000" strokeOpacity="0.3" strokeWidth="1" />
+      <circle cx="288" cy="232" r="10" fill="url(#heroHub)" />
+      <circle cx="288" cy="232" r="3" fill="#4B4F52" />
+      <circle cx="295" cy="232" r="1.1" fill="#5B6062" />
+      <circle cx="291.5" cy="238.1" r="1.1" fill="#5B6062" />
+      <circle cx="284.5" cy="238.1" r="1.1" fill="#5B6062" />
+      <circle cx="281" cy="232" r="1.1" fill="#5B6062" />
+      <circle cx="284.5" cy="225.9" r="1.1" fill="#5B6062" />
+      <circle cx="291.5" cy="225.9" r="1.1" fill="#5B6062" />
 
       {/* ground shadow */}
-      <ellipse cx="240" cy="254" rx="132" ry="9" fill="currentColor" className="text-neutral-900/10 dark:text-white/10" />
+      <ellipse cx="240" cy="256" rx="132" ry="10" fill="currentColor" className="text-neutral-900/15 dark:text-white/10" />
 
       {/* ground */}
       <rect x="0" y="270" width="480" height="6" className="fill-neutral-300 dark:fill-neutral-700" />
