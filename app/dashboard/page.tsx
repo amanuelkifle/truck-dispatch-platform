@@ -345,6 +345,14 @@ export default async function DashboardPage({
             Support inbox
           </a>
         )}
+        {appUser?.role === "platform_admin" && (
+          <a
+            href="/billing-flow"
+            className="rounded-md border border-amber-400 px-4 py-2 text-sm font-medium text-amber-700 dark:border-amber-700 dark:text-amber-400"
+          >
+            Billing flow
+          </a>
+        )}
       </div>
     </main>
   );
